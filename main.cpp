@@ -60,12 +60,19 @@ int main() {
 
     std::list<MPCReturn> log1;
     std::list<MPCReturn> log2;
+    std::list<MPCReturn> log3;
+
+    // MPC 1: Ideal model: Ground Truth
+    // MPC 2: Neural network model 
+    // MPC 3: Physics-based model with 10% parameter error 
 
     MPC mpc1(jsonConfig["n_sqp"],jsonConfig["n_reset"],jsonConfig["sqp_mixing"],jsonConfig["Ts"],json_paths);
     MPC mpc2(jsonConfig["n_sqp"],jsonConfig["n_reset"],jsonConfig["sqp_mixing"],jsonConfig["Ts"],json_paths);
+    MPC mpc3(jsonConfig["n_sqp"],jsonConfig["n_reset"],jsonConfig["sqp_mixing"],jsonConfig["Ts"],json_paths);
 
     mpc1.setTrack(track_xy.X,track_xy.Y);
     mpc2.setTrack(track_xy.X,track_xy.Y);
+    mpc3.setTrack(track_xy.X,track_xy.Y);
     
     const double phi_0 = std::atan2(track_xy.Y(1) - track_xy.Y(0),track_xy.X(1) - track_xy.X(0));
     State x0 = {track_xy.X(0),track_xy.Y(0),phi_0,jsonConfig["v0"],0,0,0,0.5,0,jsonConfig["v0"]};
@@ -86,14 +93,17 @@ int main() {
         log2.push_back(mpc_sol);
     }
 
-    // plotter.plotRun(log1,track_xy);
-    // plotter.plotSim(log1,track_xy);
+    x0 = {track_xy.X(0),track_xy.Y(0),phi_0,jsonConfig["v0"],0,0,0,0.5,0,jsonConfig["v0"]};
+    for(int i=0;i<jsonConfig["n_sim"];i++)
+    {   
+        MPCReturn mpc_sol = mpc3.runMPC(x0, i, 3);
 
-    plotter.plotRun2(log1, log2, track_xy);
-    plotter.plotSim2(log1, log2, track_xy);
+        x0 = integrator.simTimeStep(x0,mpc_sol.u0,jsonConfig["Ts"]);
+        log2.push_back(mpc_sol);
+    }
 
-    // plotter.plotSim3(log1, log2, log3, track_xy);
-    // plotter.plotRun3(log1, log2, log3, track_xy);
+    plotter.plotSim3(log1, log2, log3, track_xy);
+    plotter.plotRun3(log1, log2, log3, track_xy);
 
     double mean_time1 = 0.0, mean_time2 = 0.0;
     double max_time1 = 0.0, max_time2 = 0.0, secmax_time2 = 0.0;

@@ -1,6 +1,6 @@
 
 { 
-  "nn_path":  "Model/TinyCar-5.pt",
+  "nn_path":  "Model/TinyCar-1.pt",
 
   "vx_max" :  3.8,
   "vy_max" :  3.1245424462917724,
@@ -57,6 +57,6 @@
   "maxAlpha" : 0.6,
 
   "initial_velocity" : 1.0,
-  "s_trust_region" : 0.2,
+  "s_trust_region" : 0.2
 
 }

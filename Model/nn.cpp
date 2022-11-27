@@ -10,12 +10,12 @@ NN::NN()
 NN::NN(double Ts,const PathToJson &path)
 :Ts_(Ts),param_(Param(path.param_path))
 { 
+
   module = torch::jit::load(param_.nn_path); 
-  for(int i=0; i<5; i++){
+  for(int i=0; i<k_; i++){
     input_record.push_back(normalize(0.2, 0, 0, 0, 0));
   } 
 
-  std::cout << input_record << "\n";
 }
 
 StateVector NN::getF(const State &x,const Input &u){
@@ -62,7 +62,7 @@ LinModelMatrix NN::getModelJacobian(const State &x, const Input &u)
   const double vy = x.vy;
   const double r  = x.r;
   const double D = x.D;
-  const double scale_factor = 0.35;
+  const double scale_factor = 0.35;  // scale_factor: max steering angle 
   const double delta = x.delta / scale_factor;
 
   // LinModelMatrix lin_model_c;
@@ -157,16 +157,16 @@ LinModelMatrix NN::getModelJacobian(const State &x, const Input &u)
   g_c = f - A_c*stateToVector(x) - B_c*inputToVector(u);
 
   // update past input
-  for(int i=0;i<4;i++){
+  for(int i=0;i<k_-1;i++){
     for(int j=0;j<5;j++){
       input_record[i][j] = input_record[i+1][j];
     }
   } 
-  input_record[4][0] = vx;
-  input_record[4][1] = vy;
-  input_record[4][2] = r;
-  input_record[4][3] = D;
-  input_record[4][4] = delta;
+  input_record[k_-1][0] = vx;
+  input_record[k_-1][1] = vy;
+  input_record[k_-1][2] = r;
+  input_record[k_-1][3] = D;
+  input_record[k_-1][4] = delta;
 
   return {A_c,B_c,g_c};
 
@@ -177,34 +177,24 @@ std::vector<double> NN::nnOutput(double vx, double vy, double r, double D, doubl
 
   std::vector<double> newinput_v = normalize(vx, vy, r, D, delta);
   
-  torch::Tensor input_t = torch::rand({1, 5, 5});
-  for(int i=0; i<4; i++){
+  torch::Tensor input_t = torch::rand({1, k_, 5});
+  for(int i=0; i<k_-1; i++){
     for(int j=0;j<5;j++)
       input_t[0][i][j] = float(input_record[i+1][j]);
   }
   for(int j=0; j<5; j++){
-    input_t[0][4][j] = float(newinput_v[j]);
+    input_t[0][k_-1][j] = float(newinput_v[j]);
   }
 
   std::vector<torch::jit::IValue> inputs;
   inputs.push_back(input_t);
 
-  // std::cout << "require grad: " << input_t.requires_grad() << std::endl;
-
   at::Tensor output_t = module.forward(inputs).toTensor().squeeze(0);
-  // std::cout << "output_t: " << output_t << std::endl;
-
-  
-  // at::Tensor eye = torch::eye(3);
-  // output_t.backward(eye);
-  // std::cout << "grad: "<< a.grad() << std:: endl;
-  // std::cout << "grad: "<< a.grad()[1] << std:: endl;
 
   std::vector<double> output_v(5);
   for(int i=0; i<3; i++){
     output_v[i] = output_t[0][i].item<double>();
   }
-  // std::cout << "output_v: " << output_v << std::endl;
   
   return denormalize(output_v[0], output_v[1], output_v[2]);
 

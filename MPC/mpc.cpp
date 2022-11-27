@@ -90,24 +90,10 @@ void MPC::setStage(const State &xk, const Input &uk, const int time_step, int mo
     else if(model_type == 2){
         stages_[time_step].lin_model = normalizeDynamics(nn_.getLinModel(xk_nz,uk));
     }
-    // else if(model_type == 3){
-    //     stages_[time_step].lin_model = normalizeDynamics(model1_.getLinModel(xk_nz,uk));
-    // }
+    else if(model_type == 3){
+        stages_[time_step].lin_model = normalizeDynamics(model1_.getLinModel(xk_nz,uk));
+    }
 
-    // LinModelMatrix model = normalizeDynamics(model_.getLinModel(xk_nz,uk));
-    // LinModelMatrix model_nn = normalizeDynamics(nn_.getLinModel(xk_nz,uk));
-    // LinModelMatrix model_e10 = normalizeDynamics(model1_.getLinModel(xk_nz,uk));
-    
-    // Compare 
-    // file << "model_true" << std::endl;
-    // file << model.A(3, 3)<<"  "<<model.A(3, 4)<<"  "<< model.A(3, 5)<<"  "<<model.A(3, 7)<<"  "<<model.A(3, 8)<<std::endl;
-    // file << model.A(4, 3)<<"  "<<model.A(4, 4)<<"  "<< model.A(4, 5)<<"  "<<model.A(4, 7)<<"  "<<model.A(4, 8)<<std::endl; 
-    // file << model.A(5, 3)<<"  "<<model.A(5, 4)<<"  "<< model.A(5, 5)<<"  "<<model.A(5, 7)<<"  "<<model.A(5, 8)<<std::endl;
-
-    // file << "model_nn" << std::endl;
-    // file << model_nn.A(3, 3)<<"  "<<model_nn.A(3, 4)<<"  "<< model_nn.A(3, 5)<<"  "<<model_nn.A(3, 7)<<"  "<<model_nn.A(3, 8)<<std::endl;
-    // file << model_nn.A(4, 3)<<"  "<<model_nn.A(4, 4)<<"  "<< model_nn.A(4, 5)<<"  "<<model_nn.A(4, 7)<<"  "<<model_nn.A(4, 8)<<std::endl; 
-    // file << model_nn.A(5, 3)<<"  "<<model_nn.A(5, 4)<<"  "<< model_nn.A(5, 5)<<"  "<<model_nn.A(5, 7)<<"  "<<model_nn.A(5, 8)<<std::endl;
 
     file << "\n";
     //************************************************************************************

@@ -1,7 +1,6 @@
 #ifndef MPCC_NN_H
 #define MPCC_NN_H
 
-
 #include <torch/script.h>   // One-stop header.
 
 #include <iostream>
@@ -33,6 +32,7 @@ private:
 
     Param param_;
     const double Ts_;
+    const int k_ = 1;  // The number of past states used 
     std::vector<std::vector<double>> input_record;
     torch::jit::Module module;
 

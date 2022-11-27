@@ -10,6 +10,6 @@
   "model_path": "Params/model.json",
   "cost_path": "Params/cost.json",
   "bounds_path": "Params/bounds.json",
-  "track_path": "Params/ellipse_4*8.json",
+  "track_path": "Params/track0.json",
   "normalization_path": "Params/normalization.json"
 }

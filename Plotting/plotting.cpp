@@ -275,7 +275,7 @@ void Plotting::plotSim3(std::list<MPCReturn> &log1, std::list<MPCReturn> &log2, 
     plt::xlim(-10,10);
     plt::ylim(-5,5);
     
-    plt::pause(10);
+    plt::pause(2);
         
     for(int i=0; i<n_sim; i++){
 
@@ -669,7 +669,7 @@ void Plotting::plotSim2(std::list<MPCReturn> &log1, std::list<MPCReturn> &log2, 
     plt::xlim(-10,10);
     plt::ylim(-5,5);
     
-    plt::pause(10);
+    plt::pause(2);
         
     for(int i=0; i<n_sim; i++){
 
