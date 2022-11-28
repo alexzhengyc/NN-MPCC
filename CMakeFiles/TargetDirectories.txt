@@ -1,3 +1,0 @@
-/home/alexzheng/Documents/GitHub/NN-MPCC/CMakeFiles/rebuild_cache.dir
-/home/alexzheng/Documents/GitHub/NN-MPCC/CMakeFiles/edit_cache.dir
-/home/alexzheng/Documents/GitHub/NN-MPCC/CMakeFiles/NN-MPC.dir
