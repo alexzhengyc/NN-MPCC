@@ -3,7 +3,9 @@ Replenished Model Predictive Contouring Control (MPCC) to incorporate vehicle dy
 
 
 
-![snapshot](images\snapshot.jpg)
+<img src="images\mpcc.gif" alt="snapshot"  />
+
+<p style="text-align:center"> First: ground truth model<br/> Second: neural network model<br/>Third: physics-based model </p>
 
 ### Framework
 
@@ -31,10 +33,8 @@ Replenished Model Predictive Contouring Control (MPCC) to incorporate vehicle dy
    make
    ```
 
-3. To run the code excute
+3. To run the code execute
 
    ```
    ./NN-MPC
    ```
-
-   
