@@ -16,7 +16,25 @@ Replenished Model Predictive Contouring Control (MPCC) to incorporate vehicle dy
 
 
 
+### How to run 
 
+1. To install the dependencies run 
 
+   ```
+   ./install.sh
+   ```
 
+2. Use cmake to build the project 
 
+   ```
+   cmake CMakeLists.txt
+   make
+   ```
+
+3. To run the code excute
+
+   ```
+   ./NN-MPC
+   ```
+
+   
